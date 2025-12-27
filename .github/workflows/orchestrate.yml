@@ -13,12 +13,24 @@ jobs:
         gh workflow run build.yml --repo amisovic/repoA --field orchestrator_runid=${{ github.run_id }}
         echo "Workflow dispatch sent."
         
-        # Wait a moment for the run to be created
-        sleep 5
+        # Poll for run ID with timeout
+        timeout=60
+        elapsed=0
+        while [ $elapsed -lt $timeout ]; do
+          run_id=$(gh run list --repo amisovic/repoA --workflow build.yml --json id,name --jq ".[] | select(.name == \"Build-Orch-${{ github.run_id }}\") | .id")
+          if [ -n "$run_id" ]; then
+            echo "Found run ID: $run_id"
+            break
+          fi
+          echo "Run not found yet, waiting..."
+          sleep 5
+          elapsed=$((elapsed + 5))
+        done
         
-        # Get the run ID by matching the run name
-        run_id=$(gh run list --repo amisovic/repoA --workflow build.yml --json id,name --jq ".[] | select(.name == \"Build-Orch-${{ github.run_id }}\") | .id")
-        echo "Found run ID: $run_id"
+        if [ -z "$run_id" ]; then
+          echo "Timeout waiting for run to start"
+          exit 1
+        fi
         
         echo "Waiting for repoA build to complete..."
         while true; do
