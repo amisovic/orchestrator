@@ -10,8 +10,15 @@ jobs:
     - name: Trigger repoA build and wait
       run: |
         echo "Triggering repoA build..."
-        run_id=$(gh workflow run build.yml --repo amisovic/repoA --field orchestrator_runid=${{ github.run_id }} --json id -q .id)
-        echo "Triggered run ID: $run_id"
+        gh workflow run build.yml --repo amisovic/repoA --field orchestrator_runid=${{ github.run_id }}
+        echo "Workflow dispatch sent."
+        
+        # Wait a moment for the run to be created
+        sleep 5
+        
+        # Get the run ID by matching the run name
+        run_id=$(gh run list --repo amisovic/repoA --workflow build.yml --json id,name --jq ".[] | select(.name == \"Build-Orch-${{ github.run_id }}\") | .id")
+        echo "Found run ID: $run_id"
         
         echo "Waiting for repoA build to complete..."
         while true; do
