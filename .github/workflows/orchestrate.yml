@@ -17,7 +17,7 @@ jobs:
         timeout=60
         elapsed=0
         while [ $elapsed -lt $timeout ]; do
-          run_id=$(gh run list --repo amisovic/repoA --workflow build.yml --json id,name --jq ".[] | select(.name == \"Build-Orch-${{ github.run_id }}\") | .id")
+          run_id=$(gh run list --repo amisovic/repoA --workflow build.yml --json databaseId,name --jq ".[] | select(.name == \"Build-Orch-${{ github.run_id }}\") | .databaseId")
           if [ -n "$run_id" ]; then
             echo "Found run ID: $run_id"
             break
