@@ -12,6 +12,10 @@ on:
       run_id:
         required: true
         type: string
+      run_timeout_seconds:
+        required: false
+        type: number
+        default: 600
     secrets:
       token:
         required: true
@@ -46,7 +50,13 @@ jobs:
         fi
         
         echo "Waiting for ${{ inputs.workflow }} on ${{ inputs.repo }} to complete..."
+        total_timeout=${{ inputs.run_timeout_seconds }}
+        completion_elapsed=0
         while true; do
+          if [ $completion_elapsed -ge $total_timeout ]; then
+            echo "Timeout (${total_timeout}s) waiting for ${{ inputs.workflow }} on ${{ inputs.repo }} to complete"
+            exit 1
+          fi
           status=$(gh run view $run_id --repo ${{ inputs.repo }} --json status -q .status)
           conclusion=$(gh run view $run_id --repo ${{ inputs.repo }} --json conclusion -q .conclusion)
           echo "Current status: $status, conclusion: $conclusion"
@@ -60,6 +70,7 @@ jobs:
             break
           fi
           sleep 10
+          completion_elapsed=$((completion_elapsed + 10))
         done
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
