@@ -1,6 +1,6 @@
 name: Orchestrate Invalidate
 
-run-name: ${{ format('Invalidate PRs - {0}', github.run_id) }}
+run-name: ${{ format('Invalidate PRs on {0} - {1}', github.event.client_payload.branch, github.run_id) }}
 
 on:
   workflow_dispatch:
