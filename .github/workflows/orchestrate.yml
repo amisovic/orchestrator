@@ -4,13 +4,18 @@ run-name: ${{ format('Orchestrate Builds - {0}', github.run_id) }}
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to orchestrate (e.g., DPTA-2222)'
+        required: true
+        type: string
 
 jobs:
   repoA-build:
     uses: ./.github/workflows/trigger-and-wait.yml
     with:
       repo: 'amisovic/repoA'
-      branch: ${{ github.ref_name }}
+      branch: ${{ inputs.branch }}
       workflow: 'build.yml'
       run_id: ${{ github.run_id }}
       run_timeout_seconds: 600
@@ -21,7 +26,7 @@ jobs:
     uses: ./.github/workflows/trigger-and-wait.yml
     with:
       repo: 'amisovic/repoB'
-      branch: ${{ github.ref_name }}
+      branch: ${{ inputs.branch }}
       workflow: 'build.yml'
       run_id: ${{ github.run_id }}
       run_timeout_seconds: 600
@@ -32,7 +37,7 @@ jobs:
     uses: ./.github/workflows/trigger-and-wait.yml
     with:
       repo: 'amisovic/repoC'
-      branch: ${{ github.ref_name }}
+      branch: ${{ inputs.branch }}
       workflow: 'build.yml'
       run_id: ${{ github.run_id }}
       run_timeout_seconds: 300
@@ -43,7 +48,7 @@ jobs:
     uses: ./.github/workflows/trigger-and-wait.yml
     with:
       repo: 'amisovic/repoD'
-      branch: ${{ github.ref_name }}
+      branch: ${{ inputs.branch }}
       workflow: 'build.yml'
       run_id: ${{ github.run_id }}
       run_timeout_seconds: 600
@@ -54,7 +59,7 @@ jobs:
     uses: ./.github/workflows/trigger-and-wait.yml
     with:
       repo: 'amisovic/repoE'
-      branch: ${{ github.ref_name }}
+      branch: ${{ inputs.branch }}
       workflow: 'build.yml'
       run_id: ${{ github.run_id }}
       run_timeout_seconds: 600
@@ -67,7 +72,7 @@ jobs:
     - name: Dispatch success to repos
       run: |
         repos=("amisovic/repoA" "amisovic/repoB" "amisovic/repoC" "amisovic/repoD" "amisovic/repoE")
-        branch="${{ github.ref_name }}"
+        branch="${{ inputs.branch }}"
         for repo in "${repos[@]}"; do
           echo "Dispatching to $repo"
           pr_number=$(gh pr list --repo $repo --head $branch --base main --json number -q '.[0].number')
