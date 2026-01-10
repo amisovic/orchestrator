@@ -14,12 +14,11 @@ jobs:
     steps:
     - name: Create branches in all repos
       run: |
-        repos=("ismeneablement/repoA" "ismeneablement/repoB" "ismeneablement/repoC" "ismeneablement/repoD" "ismeneablement/repoE")
+        repo="ismeneablement/repoA"
         branch="${{ inputs.branch_name }}"
-        for repo in "${repos[@]}"; do
-          echo "Creating branch $branch in $repo"
-          main_sha=$(gh api repos/$repo/git/refs/heads/main -q .object.sha)
-          gh api repos/$repo/git/refs -f ref=refs/heads/$branch -f sha=$main_sha
-        done
+        echo "Creating branch $branch in $repo"
+        main_sha=$(gh api repos/$repo/git/refs/heads/main -q .object.sha)
+        echo "Main SHA for $repo: $main_sha"
+        gh api repos/$repo/git/refs -f ref=refs/heads/$branch -f sha=$main_sha
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
