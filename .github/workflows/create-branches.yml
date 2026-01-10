@@ -22,4 +22,4 @@ jobs:
           gh api repos/$repo/git/refs -f ref=refs/heads/$branch -f sha=$main_sha
         done
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_WORKFLOWS }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
