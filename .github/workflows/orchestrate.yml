@@ -9,6 +9,7 @@ on:
         description: 'Branch to orchestrate (e.g., DPTA-2222)'
         required: true
         type: string
+        default: main
 
 jobs:
   repoA-build:
