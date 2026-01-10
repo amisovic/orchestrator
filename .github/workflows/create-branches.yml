@@ -28,4 +28,4 @@ jobs:
         echo "Main SHA for $repo: $main_sha"
         gh api repos/$repo/git/refs -f ref=refs/heads/$branch -f sha=$main_sha
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        GH_TOKEN: ${{ secrets.TOKEN }}
