@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Create branches in all repos
       run: |
-        repos=("ismeneablement/repoA" "ismeneablement/repoB" "ismeneablement/repoC" "ismeneablement/repoD" "ismeneablement/repoE")
+        repos=("ismenablement/repoA" "ismenablement/repoB" "ismenablement/repoC" "ismenablement/repoD" "ismenablement/repoE")
         branch="${{ inputs.branch_name }}"
         for repo in "${repos[@]}"; do
           echo "Creating branch $branch in $repo"
