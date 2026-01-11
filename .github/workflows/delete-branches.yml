@@ -1,5 +1,7 @@
 name: Delete Branches
 
+run-name: Delete branch ${{ inputs.branch_name }} across repos
+
 on:
   workflow_dispatch:
     inputs:

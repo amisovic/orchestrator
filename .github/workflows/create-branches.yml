@@ -1,5 +1,7 @@
 name: Create Branches
 
+run-name: Create branch ${{ inputs.branch_name }} across repos
+
 on:
   workflow_dispatch:
     inputs:
