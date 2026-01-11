@@ -1,6 +1,6 @@
 name: Orchestrate Builds
 
-run-name: ${{ format('Orchestrate Builds - {0}', github.run_id) }}
+run-name: ${{ format('Orchestrate Builds - {0} - {1}', inputs.branch, github.run_id) }}
 
 on:
   workflow_dispatch:
